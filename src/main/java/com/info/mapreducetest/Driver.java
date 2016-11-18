@@ -3,6 +3,7 @@ package com.info.mapreducetest;
 
 import java.io.IOException;
 import org.apache.hadoop.fs.Path;
+// Import hadoop path class package to prepre input and output file path 
 import org.apache.hadoop.io.IntWritable;
 // Import IntWritable package to value type as integer. IntWritable is primitive data type for Int in Hadoop (Not used in driver class)
 import org.apache.hadoop.io.Text;
@@ -35,24 +36,24 @@ public class Driver {
         Job job=new Job();
         
         //Set driver
-        job.setJarByClass(Driver.class);
-        //Assign job name
+        job.setJarByClass(Driver.class);//Assign job name
+        
         job.setJobName("wordCount");
         
-        //Set input file name specified in CLI to job
-        FileInputFormat.setInputPaths(job, new Path(args[0]));
-        // set output file name specified in CLI to job
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
         
-        // Set mapper class 
-        job.setMapperClass(MapperTest.class);
-        //set reducer class 
-        job.setReducerClass(ReducerTest.class);
+        FileInputFormat.setInputPaths(job, new Path(args[0])); //Set input file name specified in CLI to job
         
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+        FileOutputFormat.setOutputPath(job, new Path(args[1])); // set output file name specified in CLI to job
         
-        System.exit(job.waitForCompletion(true)?0:1);
+        
+        job.setMapperClass(MapperTest.class); // Set mapper class 
+        
+        job.setReducerClass(ReducerTest.class); //set reducer class 
+        
+        job.setOutputKeyClass(Text.class);  // Set the key class for the job output data. as in our wordcount program key is word which is text 
+        job.setOutputValueClass(IntWritable.class); //Set the value class for job outputs. in Our output we are expecting count which i integer. in hadoop int is intWritable 
+        
+        System.exit(job.waitForCompletion(true)?0:1); //Submit the job to the cluster and wait for it to finish.
         
     }
 }
